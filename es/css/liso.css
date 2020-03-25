@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+ 
+.md .shortTOC, .md .mediumTOC, .md .longTOC {
+    font-family: inherit;
+}
+ 
+.md .longTOC .level1 {
+    font-weight: 300;
+    margin-bottom: -30px;
+}
+
+ 
+@media screen {
+    .md .longTOC {
+        display: block;
+        white-space: nowrap;    
+        width: 200px;
+        border-right: 1px solid #777;
+        overflow-y: auto;
+        font-family: inherit;
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        bottom:0px;
+        margin: 0px;
+        padding: 0px;
+        padding-left:10px;   
+        padding-top: -120px;
+    }
+
+    .scrolled .md .longTOC {
+        position: fixed;
+        top: 0px;
+    }
+
+
+
+/* no numbering of headings */
+.md h1:before, .md h2:before, .md h3:before, .md h4:before, .md h5:before, .md h6:before { content: none; }
+.md .tocNumber { display: none; }
+
+.md .longTOC a, .md .longTOC a:hover, .md .longTOC code {
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    font-family: sans-serif;
+}
+
+}
+
+
+@media screen and (max-width: 1150px) {
+  .md .longTOC {
+    display: none;
+  }
+}
