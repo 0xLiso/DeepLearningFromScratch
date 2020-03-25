@@ -9,13 +9,13 @@
 
 ¡Hola gente!
 
-Vamos a suponer que sabéis algo de Machine Learning y de Deep Learning. ¿nunca os habéis preguntado como funcionan los Frameworks de Deep Learning? o ¿como se prueban nuevas funciones?
-Y si no conocéis nada de este apasionante campo, ¿queréis aprender como funciona?
+Vamos a suponer que sabéis algo de Machine Learning y de Deep Learning. ¿Nunca os habéis preguntado cómo funcionan los Frameworks de Deep Learning? o ¿cómo se prueban nuevas funciones?
+Y si no conocéis nada de este apasionante campo, ¿queréis aprender cómo funciona?
 
 Pues si es que sí, creo que estos posts os gustarán.
 
 
-Si lo que os interesa es coger un dataset de images y clasificarlas, sin calentaros la cabeza.
+Si lo que os interesa es coger un dataset de imágenes y clasificarlas, sin calentaros la cabeza.
 
 Estos no son vuestros posts.
 
@@ -35,10 +35,10 @@ Durante los primeros posts vamos a tratar, e implementar, temas tan diversos com
 
 Nuestro lenguaje de programación preferido, paciencia, y solo un poco de python :).
 
-Pero a parte de eso, lo haremos sin restricciones.
+Pero, aparte de eso, lo haremos sin restricciones.
 
 
-Así que, prepárate un buen café (o cerveza) y empecemos.
+Así que prepárate un buen café (o cerveza) y empecemos.
 
 
 # ¿Qué es un grafo?.
@@ -56,17 +56,17 @@ En un alarde de originalidad a este problema se le llamó: _Problema de los puen
 Puedes intentar responder ese problema tu mismo usando la imagen de la ciudad, si quieres :).
 
 
-Bueno, pues en el año 1736 un matemático conocido como *Leonhard Euler* expuso una solución general al problema, y de paso creo una nueva rama de las matemáticas llamada Teoría De grafos.
+Bueno, pues en el año 1736 un matemático conocido como *Leonhard Euler* expuso una solución general al problema y, de paso, creó una nueva rama de las matemáticas llamada Teoría De Grafos.
 
 
 ![Leonhard Euler ( source [Wikimedia](https://commons.wikimedia.org/wiki/File:EULER_HARLUQ.jpg) )]("https://upload.wikimedia.org/wikipedia/commons/b/b6/EULER_HARLUQ.jpg" target="_blank")
 
 
-Lo que hizo Euler fue simplificar el mapa de la ciudad a unos puntos (barrios) conectados por unas lineas(puentes) eliminando todo lo sobrante.
+Lo que hizo Euler fue simplificar el mapa de la ciudad a unos puntos (barrios) conectados por unas lineas (puentes) eliminando todo lo sobrante.
 
 ![Abstracción de Euler para los Puentes de Königsberg]("images/puentes.png")
 
-Con esta abstracción se deduce que los vértices intermedios deben de tener 2 aristas, ya que como solo puedes pasar una vez por cada puente (Arista), si entras a un nodo por una arista, debes de salir por otra distinta. 
+Con esta abstracción se deduce que los vértices intermedios deben tener 2 aristas ya que, como solo puedes pasar una vez por cada puente (Arista), si entras a un nodo por una arista debes de salir por otra distinta. 
 Como en este grafo los puntos poseen un número impar de aristas podemos decir que no se puede resolver el problema de puentes de Königsberg. 
 
 
@@ -76,7 +76,7 @@ Si ya tienes experiencia como programador, ya habrás tratado con grafos y conoc
 !!! Tip
     De todas maneras, si no conoces nada de teoría de grafos puedes leer bastante [aquí](https://lmgtfy.com/?q=teoría+de+grafos target="_blank")
 
-En general podemos ver un grafo como un conjunto de Vértices (o Nodos) conectados por Aristas, donde las aristas conectan Vértices. Son tremendamente útiles para representar información y aplicar distintos algoritmos.
+En general, podemos ver un grafo como un conjunto de Vértices (o Nodos) conectados por Aristas, donde las aristas conectan Vértices. Son tremendamente útiles para representar información y aplicar distintos algoritmos.
 
 Nosotros vamos a centrarnos en unos tipos particulares de grafos, Grafos Dirigidos, también se suelen llamar _Di-grafos_ .
 
@@ -153,12 +153,12 @@ Para trabajar con grafos las operaciones más comunes que debemos tener implemen
 
 
 ~~~~~~~~~
-add_node(i): Agrega un nodo al grafo, identificado por i.
-add_edge(i,j): Agrega una arista del Nodo i al nodo j.
-remove_edge(i,j): Elimina una arista de i a j.
-has_edge(i,j): Comprueba si hay una arista del nodo i a j.
-out_edges(i): Devuelve los nodos hijos del nodo i.
-in_edges(i): Devuelve los nodos padre del nodo i.
+add_node(i): Agrega un Nodo al grafo, identificado por i.
+add_edge(i,j): Agrega una Arista del Nodo i al Nodo j.
+remove_edge(i,j): Elimina una Arista de i a j.
+has_edge(i,j): Comprueba si hay una Arista del Nodo i a j.
+out_edges(i): Devuelve los Nodos hijos del Nodo i.
+in_edges(i): Devuelve los Nodos padre del Nodo i.
 to_dot(): Función que genera un string con la definición del grafo en formato DOT.
 ~~~~~~~~~
 
@@ -192,7 +192,7 @@ f & 0& 0 & 0 & 0 & 0 &0\cr
 $$
 
 
-En esta implementación tiene la ventaja de que las operaciones de agregar, eliminar y comprobar si dos nodos están conectados tiene coste constante y son triviales
+Esta implementación tiene la ventaja de que las operaciones de agregar, eliminar y comprobar si dos nodos están conectados tiene coste constante y son triviales
 
 ~~~~~~~~~~~~~~ cpp
 #pseudo-código para agregar un vértice del Nodo i al Nodo j
@@ -205,7 +205,7 @@ bool add_edge(i,j){
 ~~~~~~~~~~~~~~
 
 
-La implementación de las funciones para conocer los "familiares"(Nodos padres e hijos) son bastantes sencillas, pero a la vez tienen un coste mayor
+La implementación de las funciones para conocer los "familiares" (Nodos padres e hijos) son bastantes sencillas pero, a la vez, tienen un coste mayor
 
 
 ~~~~~~~~~~~~~~ cpp
@@ -266,7 +266,7 @@ add_edge(i,j){
 ~~~~~~~~~~~~~~
 
 
-La implementación de las funciones para conocer los "familiares"(Nodos padres e hijos) son bastantes sencillas.
+La implementación de las funciones para conocer los "familiares" (Nodos padres e hijos) son bastantes sencillas.
 
 
 ~~~~~~~~~~~~~~ cpp
@@ -292,12 +292,12 @@ lista in_edges(i){
 
 ## Inciso antes de empezar.
 
-Una vez visto esto por encima, vamos a hacer un pequeño inciso para comentar como vamos a  trabajar en estos posts. 
+Una vez visto esto por encima, vamos a hacer un pequeño inciso para comentar como vamos a trabajar en estos posts. 
 
 En los posts se irá explicando la teoría y dando algunos ejemplos, pero la solución final deberéis programarla vosotros. 
 
 
-Para daros una guía en la que apoyarse, haremos un enfoque parecido a TDD (Test Driven Development), así que os plantearé unos test unitarios para que podáis probar vuestro código.
+Para daros una guía en la que apoyarse haremos un enfoque parecido a TDD (Test Driven Development), así que os plantearé unos test unitarios para que podáis probar vuestro código.
 
 !!! Info
     Habrá un repositorio en github (*con errores para evitar C&P*) mostrando una posible implementación en C++.
@@ -352,7 +352,7 @@ class graph{
 
 Una vez hayas implementado tu grafo vamos a tener que probarlo, así que vamos a definir unos tests que deben pasarse correctamente. 
 
-Puedes hacerlos a mano, o usar un framework de unittesting.
+Puedes hacerlos a mano o usar un framework de unittesting.
 
 ~~~~~~~~~~~~~~~~~~~~ cpp
 
@@ -378,7 +378,7 @@ print ( g.to_dot() );
 ~~~~~~~~~~~~~~~~~~~~
 
 
-Si todo está correcto, os debería haber generado un grafo como este:
+Si todo está correcto os debería haber generado un grafo como este:
 
 ![graph](images/graph_ejemplo.png)
 
@@ -435,11 +435,11 @@ Bueno, ahora ya has sido capaz de implementar las manipulaciones básicas de un 
 
 # Algoritmos sobre grafos
 
-Una vez tenemos la capacidad de manipular grafos algo que necesitaremos constantemente será recorrerlos, y no solo como nodos independientes sino siguiendo el orden definido en el grafo y pasando por cada nodo *exactamente* una vez.
+Una vez tenemos la capacidad de manipular grafos algo que necesitaremos constantemente será recorrerlos y no solo como nodos independientes sino siguiendo el orden definido en el grafo y pasando por cada nodo *exactamente* una vez.
 
-Y el orden en que se visitan los vértices es importante, y depende del problema que quieres resolver.
+Y el orden en que se visitan los vértices es importante y depende del problema que quieres resolver.
 
-Los métodos más comunes para recorrer un grafo son el DFS (Depth First Search) y BFS(Breadth First Search).
+Los métodos más comunes para recorrer un grafo son el DFS (Depth First Search) y BFS (Breadth First Search).
 
 Haciendo un poco de spoiler, os avanzo que nosotros usaremos BFS constantemente :).
 
@@ -448,8 +448,8 @@ Haciendo un poco de spoiler, os avanzo que nosotros usaremos BFS constantemente 
 El DFS empieza desde un nodo del grafo y lo visita. Una vez visitado, saltamos a cada uno de los padres de este nodo, y repetimos la operación.
 
 
-La versión iterativa de este algoritmo usa un Pila (LIFO) a la que agregamos el nodo inicial y empezamos a sacar elementos de la pila.
-por cada elemento, agregamos sus padres a la Pila lo visitamos y volvemos al loop. 
+La versión iterativa de este algoritmo usa una Pila (LIFO) a la que agregamos el nodo inicial y empezamos a sacar elementos de la pila.
+por cada elemento, agregamos sus padres a la Pila, lo visitamos y volvemos al loop. 
 
 ~~~~~~~~~ cpp
 
@@ -534,14 +534,13 @@ assert(resultado == [node_a,node_b,node_c,node_d,node_e,node_f,node_g,node_h,nod
 ## BFS (Breadth First Search)
 
 
-Otra forma de recorrer un grafo es la conocida como Breadth First Search (BFS), en esta variación usamos un proceso similar al DFS pero en lugar de usar una pila, usaremos una cola (FIFO).
+Otra forma de recorrer un grafo es la conocida como Breadth First Search (BFS). En esta variación usamos un proceso similar al DFS pero en lugar de usar una pila usaremos una cola (FIFO).
 
 Al usar esta cola, el algoritmo cambia ligeramente.
-El BFS empieza desde un nodo del grafo, lo visita y agrega sus padres a la cola. Una vez visitado, saltamos a cada uno de los padres de este nodo, y repetimos la operación.
+El BFS empieza desde un nodo del grafo, lo visita y agrega sus padres a la cola. Una vez visitado, saltamos a cada uno de los padres de este nodo y repetimos la operación.
 
 
-La versión iterativa de este algoritmo usa un cola (FIFO) a la que agregamos el nodo inicial y empezamos a sacar elementos de la cola.
-por cada elemento, agregamos sus padres a la cola, lo visitamos y volvemos al loop. 
+La versión iterativa de este algoritmo usa una cola (FIFO) a la que agregamos el nodo inicial y empezamos a sacar elementos de la cola. Por cada elemento, agregamos sus padres a la cola, lo visitamos y volvemos al loop. 
 
 
 
@@ -638,9 +637,9 @@ El reverse BFS, y esto no es mas que saber la lista de nodos para recorrer el gr
 Si nuestro BFS nos devuelve una lista de [1,2,3,4], nosotros deberemos recorrerla como [4,3,2,1] 
 
 
-Intentar implementarlo :).
+Intentad implementarlo :).
 
-### Tests unitario
+### Tests unitarios
 
 ~~~~~~~~~~~~~~~~~~~~ cpp
 // Test Reverse BFS  en pseudo-código 
@@ -678,7 +677,7 @@ assert(resultado == [node_e,node_d,node_j,node_i,node_f,node_c,node_h,node_g,nod
 # Para nota.
 ## Detectar ciclos en tu Digrafo
 
-Os comento que con el DFS se pueden detectar ciclos en un DAG, ¿se te ocurre una manera de detectar si un grafo un DAG o no?.
+Os comento que con el DFS se pueden detectar ciclos en un DAG, ¿se te ocurre una manera de detectar si un grafo es un DAG o no?
 
 
 Intentaló y pruébalo.
