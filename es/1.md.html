@@ -116,11 +116,11 @@ Un ejemplo
 fichero: mygraph.dot
 ~~~~~~~~~~~~~~~~ dot
 digraph G {
-	"node_a" -> "node_c"
-	"node_b" -> "node_d"
-	"node_c" -> "node_d"
-	"node_d" -> "node_f"
-	"node_e" -> "node_f"
+	node_a -> node_c
+	node_b -> node_d
+	node_c -> node_d
+	node_d -> node_f
+	node_e -> node_f
 }
 ~~~~~~~~~~~~~~~~
 
@@ -359,18 +359,18 @@ Puedes hacerlos a mano o usar un framework de unittesting.
 // Test creación de grafo en pseudo-código 
 
 graph g;
-g.add_node("node_a"); 
-g.add_node("node_b"); 
-g.add_node("node_c"); 
-g.add_node("node_d"); 
-g.add_node("node_e"); 
-g.add_node("node_f"); 
+g.add_node(node_a); 
+g.add_node(node_b); 
+g.add_node(node_c); 
+g.add_node(node_d); 
+g.add_node(node_e); 
+g.add_node(node_f); 
 
-g.add_edge("node_a","node_c");
-g.add_edge("node_b","node_d");
-g.add_edge("node_c","node_d");
-g.add_edge("node_d","node_f");
-g.add_edge("node_e","node_f");
+g.add_edge(node_a,node_c);
+g.add_edge(node_b,node_d);
+g.add_edge(node_c,node_d);
+g.add_edge(node_d,node_f);
+g.add_edge(node_e,node_f);
 
 
 print ( g.to_dot() );
@@ -388,11 +388,11 @@ Recordad que podéis probar vuestro resultado en la versión [web de GraphViz](h
 //Resultado del test anterior.
 
 digraph G {
-	"node_a" -> "node_c"
-	"node_b" -> "node_d"
-	"node_c" -> "node_d"
-	"node_d" -> "node_f"
-	"node_e" -> "node_f"
+	node_a -> node_c
+	node_b -> node_d
+	node_c -> node_d
+	node_d -> node_f
+	node_e -> node_f
 }
 ~~~~~~~~
 
@@ -403,28 +403,28 @@ Otras pruebas que deben pasar vuestra implementación.
 
 // Test manipulación de grafo  en pseudo-código 
 graph g;
-g.add_node("node_a"); 
-g.add_node("node_b"); 
-g.add_node("node_c"); 
-g.add_node("node_d"); 
-g.add_node("node_e"); 
-g.add_node("node_f"); 
+g.add_node(node_a); 
+g.add_node(node_b); 
+g.add_node(node_c); 
+g.add_node(node_d); 
+g.add_node(node_e); 
+g.add_node(node_f); 
 
-g.add_edge("node_a","node_c");
-g.add_edge("node_b","node_d");
-g.add_edge("node_c","node_d");
-g.add_edge("node_d","node_f");
-g.add_edge("node_e","node_f");
+g.add_edge(node_a,node_c);
+g.add_edge(node_b,node_d);
+g.add_edge(node_c,node_d);
+g.add_edge(node_d,node_f);
+g.add_edge(node_e,node_f);
 
 
 //Test función has_edge
-assert(g.has_edge("node_a","node_b")==false);
-assert(g.has_edge("node_b","node_d")==true);
+assert(g.has_edge(node_a,node_b)==false);
+assert(g.has_edge(node_b,node_d)==true);
 
 
 //Test remove edge
-g.remove_edge("node_b","node_d");
-assert(g.has_edge("node_b","node_d")==false);
+g.remove_edge(node_b,node_d);
+assert(g.has_edge(node_b,node_d)==false);
 
 
 ~~~~~~~~~~~~~~~~~~~~
@@ -435,7 +435,7 @@ Bueno, ahora ya has sido capaz de implementar las manipulaciones básicas de un 
 
 # Algoritmos sobre grafos
 
-Una vez tenemos la capacidad de manipular grafos algo que necesitaremos constantemente será recorrerlos y no solo como nodos independientes sino siguiendo el orden definido en el grafo y pasando por cada nodo *exactamente* una vez.
+Una vez tenemos la capacidad de manipular grafos algo que necesitaremos constantemente será recorrerlos y no solo como nodos independientes si no siguiendo el orden definido en el grafo y pasando por cada nodo *exactamente* una vez.
 
 Y el orden en que se visitan los vértices es importante y depende del problema que quieres resolver.
 
@@ -468,11 +468,11 @@ lista_nodes DFS (node_i){
 		for( w in in_edges(v) )
 		    if w is not in visited 
 		    {
-	             Q.push( w )  
+	             S.push( w )  
 		    }
         
       }
-      return visited;  //devolvemos la lista de los nodos en el orden "profundo" correcto
+      return visited;  //devolvemos la lista de los nodos en el orden profundo correcto
 
 }
 
@@ -481,10 +481,13 @@ lista_nodes DFS (node_i){
 Visualmente es más sencillo de ver.
 
 
- ![DFS]("images/dfs.webm")
+ ![DFS](images/dfs.webm)
 
 
+!!! Info
+	El orden en que se agregan los vértices es importante, ya que depende de como los agreges recorrerá los padres de distinto orden. 
 
+	El resultado es igualmente correcto, pero a nivel de Test Unitarios puede daros más de un dolor de cabeza.
 
 ### Tests unitarios
 
@@ -508,15 +511,17 @@ g.add_node(node_i);
 g.add_node(node_j); 
    
 
-g.add_edge(node_d,node_c);
-g.add_edge(node_e,node_c);
-g.add_edge(node_c,node_b);
-g.add_edge(node_b,node_a);
-g.add_edge(node_g,node_a);
-g.add_edge(node_h,node_a);
-g.add_edge(node_f,node_b);
-g.add_edge(node_i,node_h);
-g.add_edge(node_j,node_h);
+// el orden en que se agregan los vértices es importante para que salga el resultado que queremos.
+// aunque el resultado final sea correcto, el orden puede variar.
+g.add_edge(node_j, node_h)
+g.add_edge(node_i, node_h)
+g.add_edge(node_h, node_a)
+g.add_edge(node_g, node_a)
+g.add_edge(node_f, node_b)
+g.add_edge(node_e, node_c)
+g.add_edge(node_d, node_c)
+g.add_edge(node_c, node_b)
+g.add_edge(node_b, node_a)
 
 
 //Test DFS
