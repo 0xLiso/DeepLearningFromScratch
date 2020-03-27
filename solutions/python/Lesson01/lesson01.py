@@ -98,7 +98,7 @@ class graph():
         while len(S) > 0:
             v = S.pop()
             visited.append(self.nodes[v])
-            for w in self.nodes[v].parent_nodes:
+            for w in self.nodes[v].child_nodes:
                 if w not in visited:
                     S.append(w)
         return visited  # devolvemos la lista de los nodos en el orden "profundo" correcto
@@ -111,7 +111,7 @@ class graph():
         while len(Q) > 0:
             v = Q.popleft()
             visited.append(self.nodes[v])
-            for w in self.nodes[v].parent_nodes:
+            for w in self.nodes[v].child_nodes:
                 if w not in visited:
                     Q.append(w)
         return visited  # devolvemos la lista de los nodos en el orden "profundo" correcto
