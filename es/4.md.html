@@ -25,7 +25,7 @@ En los tiempos actuales usamos la [forma de Backus-Naur (BNF)](https://es.wikipe
 
 ### ¿Y esto que tiene que ver?
 
-Bueno, pues no demasiado. Pero al fin y al cabo nosotros queremos interpretar una función matemática, escrita en un lenguaje que no entiende nuestro ordenador 
+Bueno, pues habría que hablar de bastantes temas para ver una relación directa, empezando de Lenguajes formales, automatas, FDA, etc. Pero al fin y al cabo nosotros queremos interpretar una función matemática, escrita en un lenguaje que no entiende nuestro ordenador a algo que lo entienda. Y basicamente eso es una gramática.
 
 tenemos que pasar de 
 
@@ -43,6 +43,11 @@ $$ \langle  n, l,E, u^{1}...u^{n},d^{1}...d^{n}, f^{l+1}...f^{n}\rangle $$
 
 donde...
 
+- n: es un entero que especifica el número de vertices del grafo.
+- l: es un entero entre 1 ≤ l < n tal que especifíca el número de hojas en el grafo.
+- E: es el conjunto de vertices del grafo computacional para cada (i,j) ∈ E tenemos que i...
+
+...
 
 *No.*
 
@@ -56,6 +61,7 @@ Y con este grafo vamos a ser capaces de definir cualquier función matemática.
 ### Términos que vamos a usar.
 
 Para poder entendernos, vamos a definir unos cuantos conceptos. Vamos a usar una terminología similar a la de Tensorflow, simplemente por comodidad.
+
 
 Un Grafo Computacional es un DAG donde los Nodos pueden ser de tres tipos:
 
@@ -81,7 +87,7 @@ está función puede ser representada por:
 
 Donde podemos ver que la variable "x" está representada por un circulo simple, el Placeholder "2" está representado por un circulo doble y las operaciones se representan como un cuadrado.
 
-Sí, es un ejemplo muy simple, pero con nuestro Grafo Computacional podremos expresar funciones tremendamente complejas.	 
+Sí, es un ejemplo muy simple, pero con nuestro Grafo Computacional podremos expresar funciones tremendamente complejas con elementos sencillos. 
 
 
 ## ¿Que tipos de Grafos Computacionales hay?
