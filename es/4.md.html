@@ -43,9 +43,9 @@ $$ \langle  n, l,E, u^{1}...u^{n},d^{1}...d^{n}, f^{l+1}...f^{n}\rangle $$
 
 donde...
 
-- n: es un entero que especifica el número de vertices del grafo.
-- l: es un entero entre 1 ≤ l < n tal que especifíca el número de hojas en el grafo.
-- E: es el conjunto de vertices del grafo computacional para cada (i,j) ∈ E tenemos que i...
+- n: es un entero que especifica el número de vertices del Grafo.
+- l: es un entero entre 1 ≤ l < n tal que especifíca el número de hojas en el Grafo.
+- E: es el conjunto de vertices del Grafo Computacional para cada (i,j) ∈ E tenemos que i...
 
 ...
 
@@ -56,7 +56,7 @@ No vamos a ver la definición matemática de un Grafo Computacional. Ya sabemos 
 
 Un Grafo Computacional es simplemente un Grafo, en concreto un DAG. Por que ya sabemos lo que es un DAG, ¿no?  ;)
 
-Y con este grafo vamos a ser capaces de definir cualquier función matemática.
+Y con este Grafo vamos a ser capaces de definir cualquier función matemática.
 
 ### Términos que vamos a usar.
 
@@ -65,9 +65,10 @@ Para poder entendernos, vamos a definir unos cuantos conceptos. Vamos a usar una
 
 Un Grafo Computacional es un DAG donde los Nodos pueden ser de tres tipos:
 
-- Placeholders: Un Placeholder será un Nodo donde recibirá datos de entrada (un Tensor) y solo contendrá Nodos hijos. O sea, solo tendrá vértices de salida. Datos que no se van a modificar cuando calculemos algo. Serán las variables de entrada.
 
 - Variables:  Una Variable  será un Nodo que contendrá datos ( un Tensor) que podrán ser modificados o no en los cálculos y solo contendrá Nodos hijos.
+
+- Placeholders: Un Placeholder será un tipo especial de Variable donde recibirá datos de entrada (un Tensor) y solo contendrá Nodos hijos. O sea, solo tendrá vértices de salida. Datos que no se van a modificar cuando calculemos algo. Serán las variables de entrada.
 
 - Operaciones: Una Operación será un Nodo que contendrá una Operación, y SIEMPRE tendrá uno o dos vértices de entrada y, al menos, una salida.
 
@@ -85,24 +86,24 @@ está función puede ser representada por:
 
 ![$f(x)$]("images/fx.png")
 
-Donde podemos ver que la variable "x" está representada por un circulo simple, el Placeholder "2" está representado por un circulo doble y las operaciones se representan como un cuadrado.
+Donde podemos ver que el Placeholder "x" está representada por un circulo simple, la Variable "2" está representado por un circulo doble y las operaciones la representamos como un cuadrado.
 
 Sí, es un ejemplo muy simple, pero con nuestro Grafo Computacional podremos expresar funciones tremendamente complejas con elementos sencillos. 
 
 
 ## ¿Que tipos de Grafos Computacionales hay?
 
-En las librerías de Deep Learning se usan mayoritariamente dos tipos de grafos computacionales, los estáticos y dinámicos.
+En las librerías de Deep Learning se usan mayoritariamente dos tipos de Grafos Computacionales, los estáticos y dinámicos.
 
-La diferencia fundamental es que en los estáticos, se define primero la estructura del grafo que vas a usar y una vez se tiene el grafo definido, se ejecutará una y otra vez sin posibilidad de modificarlo.
+La diferencia fundamental es que en los estáticos, se define primero la estructura del Grafo que vas a usar y una vez se tiene el Grafo definido, se ejecutará una y otra vez sin posibilidad de modificarlo.
 
-La mayor ventaja de esta aproximación es que permite optimizar la ejecución, ya que al no modificarse se puede ejecutar todas las veces que se quiera lo  más rápido posible, además se puede optimizar el grafo o paralelizar la ejecución.
+La mayor ventaja de esta aproximación es que permite optimizar la ejecución, ya que al no modificarse se puede ejecutar todas las veces que se quiera lo  más rápido posible, además se puede optimizar el Grafo o paralelizar la ejecución.
 
-El problema de los grafos computacionales estáticos, es que no puedes trabajar con distintos tamaños o estructuras de datos una vez definidas.
+El problema de los Grafos Computacionales estáticos, es que no puedes trabajar con distintos tamaños o estructuras de datos una vez definidas.
 
 Si se define que una variable de entrada tiene un tamaño de 256x256, No podrás ejecutarlo con una variable de 128x128.
 
-En cambio los grafos computacionales dinámicos, la definición y la ejecución se hacen de una manera más explicita. Ya que cada vez que lo ejecutamos recorremos el grafo para saber que tenemos que ejecutar.
+En cambio los Grafos Computacionales dinámicos, la definición y la ejecución se hacen de una manera más explicita. Ya que cada vez que lo ejecutamos recorremos el Grafo para saber que tenemos que ejecutar.
 
 Si no os ha quedado muy claro no os preocupéis mucho. Al final del post, se entenderá mejor :)
 
@@ -115,18 +116,22 @@ Así que prepárate un buen café (o cerveza) y empecemos.
 
 Lo primero que tenemos que hacer es ver  si tenemos todo el código que  necesitamos.
 
-Empezamos por nuestro grafo. Sí, el del [capítulo 1]("1.md.html" target="_blank"). Por que lo tenéis hecho, ¿no?.
+
+Empezamos por nuestro Grafo. Sí, el del [capítulo 1]("1.md.html" target="_blank"). Por que lo tenéis hecho, ¿no?.
 
 
-Bueno, pues este grafo va a ser la base de nuestro GC.
+Bueno, pues este Grafo va a ser la base de nuestro GC.
 
 
 ~~~~~~~~~~~~~~~~ python
 
 #importamos la clase graph que implementamos en el capítulo 1.
 from graph import Graph
+from operations import Operation
+from placeholder import Placeholder
+from variable import Variable
 
-#esta será la base de nuestro grafo computacional.
+#esta será la base de nuestro Grafo Computacional.
 class CompGraph(object):
 	name = "unnamed"
 	graph = None
@@ -136,21 +141,64 @@ class CompGraph(object):
 			self.graph=Graph()
 	def add_operation(self,op:Operation):
 		raise NotImplementedError
-	def add_placeholder(self,ph:Placeholder):
+	def add_Placeholder(self,ph:Placeholder):
 		raise NotImplementedError
 	def add_variable(self,v:Variable):
 		raise NotImplementedError
 	def run(self,fromNode:Node):
 		raise NotImplementedError
+	def to_dot(self):
+		return self.graph()
 
 ~~~~~~~~~~~~~~~~
 
 
-# ¿Que son los placeholders?
+
+
+
+# ¿Que son las variables?
+
+Como ya hemos comentado, las variables son nodos donde almacenamos valores (Tensores) que pueden, o no, variar el valor ( ya veréis a que me refiero en el siguiente post) pero que no dependen de un valor de entrada.
+
+
+
+~~~~~~~~~~~~~~~~ python
+
+from graph import Node
+from tensor import Tensor
+
+class Variable(Node):
+    value = None
+    output = None
+    def __init__(self. initial_value:Tensor, name:str = None):
+        super().__init__()
+        if name is not None:
+            self.name = name
+        self.value = initial_value
+
+    def forward(self):
+        """
+             Exactamente igual que la operación forward de los anteriores capítulos,
+             pero aquí no ejecutamos nada, solo asignamos el value al output
+
+        """
+        raise NotImplementedError
+        
+~~~~~~~~~~~~~~~~ 
+
+
+Y esto es todo lo que tiene nuestra clase "Variable"
+
+
+
+
+# ¿Que son los Placeholders?
 
 No son nada más que variables de entrada. Será el nodo donde insertaremos los valores de entrada.
 
-Para ello deberemos tener una clase de Placeholder que sea a su vez un Nodo del grafo.
+Para ello deberemos tener una clase de Placeholder que sea a su vez un Nodo del Grafo.
+
+Los Placeholders, al ser valores dependientes de un parámetro de entrada tendrá una función para asignarle el valor que queramos cada vez que queramos ejecutar el Grafo Computacional.
 
 ## ¿como se implementan?
 
@@ -183,57 +231,21 @@ class Placeholder(Node):
 ~~~~~~~~~~~~~~~~ 
 
 
-Nuestra clase no va a tener nada más. Por ahora.
-
-
-
-
-# ¿Que son las variables?
-
-Las variables  son tensores que pueden, o no, variar el valor ( ya vereis a que me refiero ) pero que no dependen de un valor de entrada.
-
-
-~~~~~~~~~~~~~~~~ python
-
-from graph import Node
-from tensor import Tensor
-
-class Variable(Node):
-    value = None
-    output = None
-    def __init__(self. initial_value:Tensor, name:str = None):
-        super().__init__()
-        if name is not None:
-            self.name = name
-        self.value = initial_value
-
-    def forward(self):
-        """
-             Exactamente igual que la operación forward de los anteriores capítulos,
-             pero aquí no ejecutamos nada, solo asignamos el value al output
-
-        """
-        raise NotImplementedError
-        
-~~~~~~~~~~~~~~~~ 
-
-
-Y esto es todo lo que tiene nuestra clase "Variable"
+Y nuestra clase no va a tener nada más. Por ahora.
 
 
 
 # ¿Que son las operaciones?
 
-Deberiais saberlo del capítulo 2 y 3 de esta serie ;), pero aqui vamos a ampliarlo un poquito.
+Deberíais saberlo del capítulo 2 y 3 de esta serie ;), pero aquí vamos a ampliarlo un poquito.
 
-
-
+Por comodidad (y velocidad) vamos a usar numpy, aunque teóricamente habréis implementado un montón de operaciones en el capitulo 2 y 3 ;)
 
 ~~~~~~~~~~~~~~~~ python
 
 
 class Operation(Node):
-	base_name:str=None
+	base_name:str = None
 	output:Tensor = None
 	inputs:list = []
 	def __init__(self):
@@ -283,7 +295,7 @@ class Multiply(Operation):
 ~~~~~~~~~~~~~~~~ 
 
 
-las operaciones son similares a las que vimos en los anteriores capitulos pero debemos guardar cierta información extra. 
+Las operaciones son similares a las que vimos en los anteriores capítulos pero debemos guardar cierta información extra. 
 Por ejemplo deberemos tener controlados los nodos de entrada de la operación, para poder extraer los valores de ellos cuando nos hagan falta. 
 Ademas así podremos tener un control sobre quien está llamando a quien.
 
@@ -291,21 +303,23 @@ Ademas así podremos tener un control sobre quien está llamando a quien.
 
 ## ¿Y ya está?
 
-Pues no.
+Claro que no.
 
-ahora que ya tenemos nuestro tres tipos de nodos, debemos empezar a trabajar con ellos en nuestro grafo computacional.
+Ahora que ya tenemos nuestro tres tipos de nodos, debemos empezar a trabajar con ellos en nuestro Grafo Computacional.
 
 Y como lo hacemos, pues vamos a ir implementando poco a poco todo el GC.
 
 
-# Implementando nuestro grafo computacional.
+# Implementando nuestro Grafo Computacional.
 
 
-vamos a empezar implementndo el constructor de nuestro GC.
+Para implementar nuestro propio Grafo Computacional debemos tener claro como vamos a montar nuestro Grafo.
 
 
 
-## agregando variables y placeholders
+## Agregando Variables y Placeholders
+
+Como ya sabemos las Variables y los Placeholders no pueden tener nodos padres, así que no habrá ningún vértice que llegue a ellos. Esto nos facilita mucho el trabajo, ya que solo deberemos insertar los nodos en el Grafo sin preocuparnos, por ahora, de los vértices ;)
 
 ~~~~~~~~~~~~~~~~ python
 
@@ -314,9 +328,6 @@ from graph import Graph, Node
 class Compgraph():
     name: "Anonymous"
     graph:Graph = None
-    nvariables = 0
-    nplaceholders = 0
-    nops = 0
 
     def __init__(self, name:str="Anonymous"):
         self.name=name
@@ -324,31 +335,31 @@ class Compgraph():
             self.graph = Graph()
 
 
-    def add_placeholder(self, ph:Placeholder) -> Placeholder:
+    def add_Placeholder(self, ph:Placeholder) -> Placeholder:
         self.graph.add_node(ph)
-        self.nplaceholders +=1
         return ph
 
     def add_variable(self, v:Variable) -> Variable:
         self.graph.add_node(v)
-        self.nvariables +=1
         return v
 
 
 ~~~~~~~~~~~~~~~~ 
 
-asi de facil es agregar un placeholder. Hay que tener en cuenta que esta implementacion es sencilla por que la mayor parte de la dificultad la hemos ido abstrayendo en
+Así de fácil es agregar un Placeholder o Variable. Hay que tener en cuenta que esta implementación es sencilla por que la mayor parte de la dificultad la hemos ido abstrayendo en
 los anteriores posts.
 
-como hemos comentado los Placeholder y las variables solo tienen nodos hijo, por loque no tendremos que gestionar ningún vertice en esta parte. Ya lo liaremos con las operaciones.
+Como hemos comentado los Placeholder y las Variables solo tienen nodos hijo, por lo que no tendremos que gestionar ningún vértice en esta parte. Ya lo liaremos con las operaciones.
 
 
 
 
-## agregando operaciones.
+## Agregando operaciones.
 
-cada operacion tiene 1 o dos inputs ( inicialmente ), así que podremos saber desde donde llega esos inputs, 
-o lo que es lo mismo podrecmos crear un vertice desde el input a la propia operación.
+Cada operación tiene 1 o 2 inputs, así que podremos saber desde donde llega esos inputs, 
+o lo que es lo mismo podremos crear un vértice desde el input a la propia operación.
+
+Como hemos visto cuando hemos implementando las operaciones, nos hemos guardado los nodos de entrada que recibe la operación por lo que simplemente tendremos que asignar un vértice de cada input a la operación.
 
 
 ~~~~~~~~~~~~~~~~ python
@@ -364,20 +375,19 @@ def add_operation(self,op:Operacion)->Operation:
 
 
 
-Y con esto ya tenemos todo nuestro grafo computacional creado. 
+Y con esto ya tenemos todo nuestro Grafo Computacional creado. 
 
 
-pero creo que asi se queda un poco soso. Tal vez deberiamos darle un poco de alegría siendo capaces de ejecutar la función que hemos definido, ¿no?.
+Pero así se queda un poco soso,¿no?. Tal vez deberíamos darle un poco de alegría siendo capaces de ejecutar la función que hemos definido, ¿no?.
 
-Pues vamos alla.
+Pues vamos a darle caña.
 
 
 ## Run.
 
-una vez hemos definido todo nuestro DAG, deberemos ser capaces de recorrerlo de alguna manera que nos permita pasar en orden por cada nodo desde el que digamos recorriendolos todos
-solo una vez. 
+Una vez hemos definido la función que queremos ejecutar en nuestro DAG, deberemos ser capaces de recorrerlo de alguna manera que nos permita pasar una sola vez y en orden definido por cada nodo.
 
-Os suena esto?
+¿Os suena esto?
 
 ¿No?
 
@@ -391,7 +401,7 @@ BFS<small> source [Primer capítulo de estos posts]("1.md.html" "target=_blank")
 
 
 
-Bueno pues al recorrer nuestro grafo con BFS sacaremos la lista que necesitamos, pero el problema es que nos da el orden desde el nodo final, hasta las hojas. 
+Bueno pues al recorrer nuestro Grafo usando el BFS sacaremos la lista que necesitamos, pero el problema es que nos da el orden desde el nodo final, hasta las hojas. 
 Y nosotros queremos recorrerlo justo en el sentido contrario.
 
 ¿Hicisteis el primer ejercicio de los deberes? ¿El Reverse_BFS?, ¿A que ahora os gustaría haberlo hecho? ;)
@@ -405,8 +415,6 @@ Y nosotros queremos recorrerlo justo en el sentido contrario.
 class compgraph():
     ...
     def run(self, to_node:Node) -> Tensor:
-        if not self.graph.is_DAG():
-            raise RuntimeError("El grafo no puede contener ciclos")
         order = self.graph.reverse_bfs(from_node)
         for node in orden:
             node.forward()
@@ -415,47 +423,130 @@ class compgraph():
      
 ~~~~~~~~~~~~~~~~ 
 
-Y simplemente con esta función ya tenemos nuestro grafo hecho.
-
-
-así como nosotros lo hemos impl el grafo saca el orden de ejecución cada vez que queremos calacular algo,
-esto nos da la capacidad de modificar, agregar o quitar nodos entre ejecuciones. Esto es un grafo computacional dinamico.
-
-
-Si en cambio, a la hora de ejecutarlo tenemos una funcion previa que saca el orden, y puede hacer otras
-cosas como optimizarlo, comprobar si es un DAG, sacar caminos independientes y paralelizarlo ( partirlo en más de un cacho)
-asi no podremos modificar nada del grafo entre ejecuciones, pero ese grafo podra ser optimizado y se ejecutará mśa rapido.
+Y simplemente con esta función ya somo capaces de ejecutar y calcular nuestra función.
 
 
 
+
+
+Así como nosotros lo hemos impl el Grafo saca el orden de ejecución cada vez que queremos calcular algo,esto nos da la capacidad de modificar, agregar o quitar nodos entre ejecuciones. Por ejemplo, no ejecutando algo o cambiando el flujo de datos entre ejecuciones.
+Esto es un Grafo Computacional dinámico.
+
+
+Si en cambio, a la hora de ejecutarlo tenemos una función previa que saca el orden, y puede hacer otras cosas como optimizarlo, comprobar si es un DAG, sacar caminos independientes o paralelizarlo
+Pero de esta manera no podremos modificar nada del Grafo entre ejecuciones, pero ese Grafo podrá ser optimizado de una manera más eficiente y se ejecutará más rápido.
+
+
+~~~~~~~~~~~~~~~~ python
+
+class compgraph():
+    ...
+
+    def compile(self, to_node:Node):
+    	if not self.graph.is_DAG():
+            raise RuntimeError("El Grafo no puede contener ciclos")
+        self.order = self.graph.reverse_bfs(from_node)
+
+    def run(self, to_node:Node) -> Tensor:        
+        for node in self.order:
+            node.forward()
+        return to_node.output
+     
+~~~~~~~~~~~~~~~~ 
+
+# Poniendolo todo junto
+
+Bueno, pues ya hemos programado nuestro Grafo Computacional. Ahora deberemos probar que funciona.
+
+Para la función que hemos comentado antes:
+
+
+la podemos definir así:
 
 ~~~~~~~~~~~~~~~~ python
 
 from compgraph import Compgrap
 from operations import Operation as op
 from variables import Variable
-from placeholders import Placeholder
+from Placeholders import Placeholder
 # f(x) =  2*sen(x)
 
-X = Tensor()
+X = Tensor([x for x in range(0,10)]).reshape((10))
 v2 = Tensor()
 c = Compgraph()
 
-p_1 = c.add_placeholder(Placeholder("X"))
+p_1 = c.add_Placeholder(Placeholder("X"))
 x_1 =  c.add_variable(Variable(v2,"Dos"))
 op_sin = c.add_operation(op.sin(p_1))
 op_pv2 = c.add_operaction(op.Multiply(op_sin,x_1))
 
-p_1.set_valor(3)
+p_1.set_valor(X)
 
 res = c.run(op_pv2)
 
 
+print(res)
+
+#[ 0.          1.68294197  1.81859485  0.28224002 -1.51360499 -1.91784855
+# -0.558831    1.3139732   1.97871649  0.82423697]
+
+
 ~~~~~~~~~~~~~~~~ 
+
+Leñe, si funciona :D.
+
+Pero no solo eso, con la función "to_dot" que hicimos anteriormente, podemos visualizar nuestro DAG:
+
+~~~~~~~~~~~~~~~~ python
+c.to_dot()
+
+digraph G {
+rankdir=LR;
+node [shape = none]; "";
+node [shape = square]; Sin_0 Multiply_1;
+node [shape = doublecircle]; DOS;
+node [shape = circle]; X;
+DOS->Multiply_1
+X->Sin_0
+Sin_0->Multiply_1
+Multiply_1->"" [ label="result"]; 
+}
+
+~~~~~~~~~~~~~~~~
+
+
+![$f(x)$]("images/cggraph.png")
+
+
+y si ahora quisieramos calcularlo con otros valores?
+
+
+
+~~~~~~~~~~~~~~~~ python
+
+X2 = numpy.linspace(0, 10, num=100)
+p_1.set_valor(X2)
+
+res = c.run(op_pv2)
+
+
+#plt.plot(X2,res)
+
+~~~~~~~~~~~~~~~~ 
+
+
+![$f(x)$]("images/fxcg.png")
+
+
 
 # Unas palabras finales.
 
-...
+Los Grafos Computacionales son una estupenda manera de definir funciones matemáticas,por su simplicidad y potencial. Pero los Grafos Computacionales no tienen solo esta bondad. 
+
+La mayor bondad que tiene es que nos abre el camino a calcular derivadas y derivadas parciales de las funciones que definimos de manera automática.
+
+Sí, como lo lees. En el siguiente capitulo vamos a hacer que nuestro Grafo Computacional nos calcule automáticamente las derivadas, y derivadas parciales, de todas las funciones que queramos ;).
+
 
 # Dudas y preguntas.
 
