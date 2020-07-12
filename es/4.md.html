@@ -25,15 +25,16 @@ En los tiempos actuales usamos la [forma de Backus-Naur (BNF)](https://es.wikipe
 
 ### ¿Y esto que tiene que ver?
 
-Bueno, pues habría que hablar de bastantes temas para ver una relación directa, empezando de Lenguajes formales, automatas, FDA, etc. Pero al fin y al cabo nosotros queremos interpretar una función matemática, escrita en un lenguaje que no entiende nuestro ordenador a algo que lo entienda. Y basicamente eso es una gramática.
+Bueno, pues habría que hablar de bastantes temas para ver una relación directa, empezando de Lenguajes formales, autómatas, FDA, etc. Pero al fin y al cabo nosotros queremos interpretar una función matemática, escrita en un lenguaje que no entiende nuestro ordenador a algo que lo entienda. Y básicamente eso es una gramática.
 
-tenemos que pasar de 
+Pero resumiendo, tenemos que pasar de 
 
 $$ f(x)=2*sin(x)  $$
 
 A una serie de pasos que correspondan a unas operaciones simples que tengan entradas y produzcan salidas.
 
 Se podría usar infinidad de distintos lenguajes formales y técnicas para "interpretar" estos lenguajes, pero nosotros vamos a usar una forma específica llamada Grafo Computacional.
+
 
 ## ¿Que son los Grafos Computacionales?
  
@@ -97,7 +98,7 @@ En las librerías de Deep Learning se usan mayoritariamente dos tipos de Grafos 
 
 La diferencia fundamental es que en los estáticos, se define primero la estructura del Grafo que vas a usar y una vez se tiene el Grafo definido, se ejecutará una y otra vez sin posibilidad de modificarlo.
 
-La mayor ventaja de esta aproximación es que permite optimizar la ejecución, ya que al no modificarse se puede ejecutar todas las veces que se quiera lo  más rápido posible, además se puede optimizar el Grafo o paralelizar la ejecución.
+La mayor ventaja de esta aproximación es que permite optimizar la ejecución, ya que al no modificarse se puede ejecutar todas las veces que se quiera lo  más rápido posible, además se puede optimizar el Grafo o paralelizar la ejecución. De hecho la librería CUDA de Nvidia tiene una serie de funciones para subir a la [GPU directamente el Grafo Computacional]("https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__GRAPH.html#group__CUDART__GRAPH" target="_blank").
 
 El problema de los Grafos Computacionales estáticos, es que no puedes trabajar con distintos tamaños o estructuras de datos una vez definidas.
 
@@ -120,7 +121,10 @@ Lo primero que tenemos que hacer es ver  si tenemos todo el código que  necesit
 Empezamos por nuestro Grafo. Sí, el del [capítulo 1]("1.md.html" target="_blank"). Por que lo tenéis hecho, ¿no?.
 
 
-Bueno, pues este Grafo va a ser la base de nuestro GC.
+Bueno, pues este Grafo va a ser la base de nuestro Grafo Computacional.
+
+
+Una vez que hayamos recuperado nuestro grafo, podemos empezar la estructura del Grafo Computacional.
 
 
 ~~~~~~~~~~~~~~~~ python
@@ -153,14 +157,18 @@ class CompGraph(object):
 ~~~~~~~~~~~~~~~~
 
 
+Solo vamos a necesitar las operaciones que veis, poder agregar Variables, Placeholders y Operaciones, y ejecutarlo. Ya si queremos ampliarlo para desactivar operaciones, o otras cosas que se nos ocurran, bueno pues no hay problema en hacerlo :).
 
 
-
-# ¿Que son las variables?
+## ¿Que son las variables?
 
 Como ya hemos comentado, las variables son nodos donde almacenamos valores (Tensores) que pueden, o no, variar el valor ( ya veréis a que me refiero en el siguiente post) pero que no dependen de un valor de entrada.
 
+### ¿Como se implementan?
 
+Pues son bastante sencillas. 
+
+Simplemente tiene que tener un valor inicial, y una operación forward que simplemente pondrán en el output el valor almacenado.
 
 ~~~~~~~~~~~~~~~~ python
 
@@ -187,12 +195,12 @@ class Variable(Node):
 ~~~~~~~~~~~~~~~~ 
 
 
-Y esto es todo lo que tiene nuestra clase "Variable"
+Y esto es todo lo que tiene nuestra clase "Variable". Por ahora.
 
 
 
 
-# ¿Que son los Placeholders?
+## ¿Que son los Placeholders?
 
 No son nada más que variables de entrada. Será el nodo donde insertaremos los valores de entrada.
 
@@ -200,7 +208,7 @@ Para ello deberemos tener una clase de Placeholder que sea a su vez un Nodo del 
 
 Los Placeholders, al ser valores dependientes de un parámetro de entrada tendrá una función para asignarle el valor que queramos cada vez que queramos ejecutar el Grafo Computacional.
 
-## ¿como se implementan?
+### ¿Como se implementan?
 
 ~~~~~~~~~~~~~~~~ python
 
@@ -231,7 +239,7 @@ class Placeholder(Node):
 ~~~~~~~~~~~~~~~~ 
 
 
-Y nuestra clase no va a tener nada más. Por ahora.
+Y nuestra clase no va a tener nada más. 
 
 
 
@@ -299,6 +307,8 @@ Las operaciones son similares a las que vimos en los anteriores capítulos pero 
 Por ejemplo deberemos tener controlados los nodos de entrada de la operación, para poder extraer los valores de ellos cuando nos hagan falta. 
 Ademas así podremos tener un control sobre quien está llamando a quien.
 
+Y como en todos los demas nodos, al ejecutar el forward, guardaremos el resultado en el output.
+
 
 
 ## ¿Y ya está?
@@ -346,8 +356,7 @@ class Compgraph():
 
 ~~~~~~~~~~~~~~~~ 
 
-Así de fácil es agregar un Placeholder o Variable. Hay que tener en cuenta que esta implementación es sencilla por que la mayor parte de la dificultad la hemos ido abstrayendo en
-los anteriores posts.
+Así de fácil es agregar un Placeholder o Variable. Hay que tener en cuenta que esta implementación es sencilla por que la mayor parte de la dificultad la hemos ido abstrayendo en los anteriores posts.
 
 Como hemos comentado los Placeholder y las Variables solo tienen nodos hijo, por lo que no tendremos que gestionar ningún vértice en esta parte. Ya lo liaremos con las operaciones.
 
@@ -429,11 +438,11 @@ Y simplemente con esta función ya somo capaces de ejecutar y calcular nuestra f
 
 
 
-Así como nosotros lo hemos impl el Grafo saca el orden de ejecución cada vez que queremos calcular algo,esto nos da la capacidad de modificar, agregar o quitar nodos entre ejecuciones. Por ejemplo, no ejecutando algo o cambiando el flujo de datos entre ejecuciones.
+Así como nosotros hemos implementado, el Grafo Computacional saca el orden de ejecución cada vez que queremos calcular algo, esto nos da la capacidad de modificar, agregar o quitar nodos entre ejecuciones. Por ejemplo, no ejecutando algo o cambiando el flujo de datos entre ejecuciones.
 Esto es un Grafo Computacional dinámico.
 
 
-Si en cambio, a la hora de ejecutarlo tenemos una función previa que saca el orden, y puede hacer otras cosas como optimizarlo, comprobar si es un DAG, sacar caminos independientes o paralelizarlo
+Si en cambio, a la hora de ejecutarlo tenemos una función previa que saca el orden, y puede hacer otras cosas como optimizarlo, comprobar si es un DAG, sacar caminos independientes o paralelizarlo, o subir todas las operaciones  y datos de golpe a la GPU.
 Pero de esta manera no podremos modificar nada del Grafo entre ejecuciones, pero ese Grafo podrá ser optimizado de una manera más eficiente y se ejecutará más rápido.
 
 
@@ -458,7 +467,7 @@ class compgraph():
 
 Bueno, pues ya hemos programado nuestro Grafo Computacional. Ahora deberemos probar que funciona.
 
-Para la función que hemos comentado antes:
+Tomando lafunción que hemos comentado antes:
 
 
 la podemos definir así:
@@ -495,7 +504,7 @@ print(res)
 
 Leñe, si funciona :D.
 
-Pero no solo eso, con la función "to_dot" que hicimos anteriormente, podemos visualizar nuestro DAG:
+Pero no solo eso, con la función "to_dot" que hicimos en el capítulo 1, podemos visualizar nuestro DAG:
 
 ~~~~~~~~~~~~~~~~ python
 c.to_dot()
@@ -518,7 +527,7 @@ Multiply_1->"" [ label="result"];
 ![$f(x)$]("images/cggraph.png")
 
 
-y si ahora quisieramos calcularlo con otros valores?
+¿Y si ahora quisiéramos ejecutarlo con otros valores en el Placeholder?
 
 
 
@@ -537,13 +546,15 @@ res = c.run(op_pv2)
 
 ![$f(x)$]("images/fxcg.png")
 
+Y ya está. Ya hemos implementado la parte inicial de nuestro Grafo Computacional.
+
 
 
 # Unas palabras finales.
 
-Los Grafos Computacionales son una estupenda manera de definir funciones matemáticas,por su simplicidad y potencial. Pero los Grafos Computacionales no tienen solo esta bondad. 
+Los Grafos Computacionales son una estupenda manera de definir funciones matemáticas,por su simplicidad y potencial. Pero no tienen solo esta bondad. 
 
-La mayor bondad que tiene es que nos abre el camino a calcular derivadas y derivadas parciales de las funciones que definimos de manera automática.
+La mayor bondad que tienen es que nos abren el camino a calcular derivadas y derivadas parciales de las funciones que definimos de manera automática.
 
 Sí, como lo lees. En el siguiente capitulo vamos a hacer que nuestro Grafo Computacional nos calcule automáticamente las derivadas, y derivadas parciales, de todas las funciones que queramos ;).
 
