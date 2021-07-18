@@ -6,6 +6,6 @@
 Repository for an small blog/tutorial about Deep Learning
 
 ./es  : Versión en castellano.
-./eng : English version.
+./eng : English version. (WiP)
 
 
